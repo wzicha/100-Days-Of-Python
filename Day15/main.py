@@ -83,7 +83,6 @@ def handle_money():
     return total_money
 
 def deduct_resources(beverage, machine):
-    for ingredients in machine:
         machine['water'] -= beverage['ingredients']['water']
         machine['milk'] -= beverage['ingredients']['milk']
         machine['coffee'] -= beverage['ingredients']['coffee']
