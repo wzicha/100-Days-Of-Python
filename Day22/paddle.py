@@ -1,63 +1,45 @@
 from turtle import Turtle
 
 
-class Paddle:
-    user_locations = [(-440, 0), (-440, 20), (-440, 40), (-440, 60)]
-    cpu_locations = [(440, 0), (440, 20), (440, 40), (440, 60)]
+class Paddle(Turtle):
+    user_location = (-350, 0)
+    user2_location = (350, 0)
 
     def __init__(self):
-        self.segment = []
+        super().__init__()
+        self.paddle = self.create_paddle()
+        self.paddle.goto(self.user_location)
+        self.paddle2 = self.create_paddle()
+        self.paddle2.goto(self.user2_location)
 
-    def create_user_paddle(self):
-        for x in range(4):
-            self.part = Turtle("square")
-            self.part.speed(0)
-            self.part.color("white")
-            self.part.shapesize(stretch_wid=1, stretch_len=1)
-            self.part.penup()
-            self.part.goto(Paddle.user_locations[x])
-            self.segment.append(self.part)
-
-    def create_cpu_paddle(self):
-        for x in range(4):
-            self.part = Turtle("square")
-            self.part.speed(0)
-            self.part.color("white")
-            self.part.penup()
-            self.part.goto(Paddle.cpu_locations[x])
-            self.segment.append(self.part)
+    def create_paddle(self):
+        paddle = Turtle("square")
+        paddle.speed(0)
+        paddle.color("white")
+        paddle.shapesize(stretch_wid=4, stretch_len=1)
+        paddle.penup()
+        return paddle
 
     def up(self):
-        self.segment.tracer(0)
-        for i in range(len(self.segment) - 1, -1, -1):
-            self.segment[i].setheading(90)
-            self.segment[i].forward(20)
-            x = self.segment[i - 1].xcor()
-            y = self.segment[i - 1].ycor()
-            self.segment[i].goto(x, y + 20)
-        self.segment.update()
+        x = self.paddle.xcor()
+        y = self.paddle.ycor()
+        y += 20
+        self.paddle.goto(x, y)
+
+    def user2_up(self):
+        x = self.paddle2.xcor()
+        y = self.paddle2.ycor()
+        y += 20
+        self.paddle2.goto(x, y)
 
     def down(self):
-        self.segment.tracer(0)
-        for i in range(0, (len(self.segment)), 1):
-            self.segment[i].setheading(270)
-            self.segment[i].forward(20)
-            x = self.segment[i - 1].xcor()
-            y = self.segment[i - 1].ycor()
-            self.segment[i].goto(x, y - 20)
-        self.segment.update()
+        x = self.paddle.xcor()
+        y = self.paddle.ycor()
+        y -= 20
+        self.paddle.goto(x, y)
 
-    def move_up(self):
-        for i in range(len(self.segment)):
-            x = self.segment[i].xcor()
-            y = self.segment[i].ycor()
-            if y < 320:
-                self.segment[i].goto(x, y + 20)
-
-    def move_down(self):
-        for i in range(len(self.segment) - 1, -1, -1):
-            x = self.segment[i].xcor()
-            y = self.segment[i].ycor()
-            if y > -320:
-                self.segment[i].goto(x, y - 20)
-
+    def user2_down(self):
+        x = self.paddle2.xcor()
+        y = self.paddle2.ycor()
+        y -= 20
+        self.paddle2.goto(x, y)

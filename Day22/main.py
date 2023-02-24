@@ -1,37 +1,50 @@
+import time
 from turtle import Turtle, Screen
 from paddle import Paddle
+from ball import Ball
+from scoreboard import Scoreboard
 
 # Create the screen
 screen = Screen()
 screen.title("Ping Pong Game!")
 screen.screensize(canvwidth=800, canvheight=600, bg="black")
 
-
-# Create and move a paddle
- # is 4 turtles huddled together. User is on left hand side, computer on the right
- # Paddle is moved up with up arrow key, down with down arrow key
+# Create 2 paddles and allow users to move them
+# Paddle 1 is moved up with up arrow key, down with down arrow key
+# Paddle 2 is moved with w and s keys
 user_paddle = Paddle()
-user_paddle.create_user_paddle()
 screen.listen()
 screen.onkeypress(user_paddle.up, "Up")
-screen.update()
+screen.onkeypress(user_paddle.user2_up, "w")
 screen.onkeypress(user_paddle.down, "Down")
-
-# Create another paddle
- # Paddle can only move along y-axis, random movement
-cpu_paddle = Paddle()
-cpu_paddle.create_cpu_paddle()
+screen.onkeypress(user_paddle.user2_down, "s")
 
 # Create the ball and make it move
- # Make it move randomly toward left or right
+ball = Ball()
 
-# Detect collision with wall and bounce
+# Create scoreboard
+scoreboard = Scoreboard()
 
-# Detect collision with a paddle
+# Game logic
+game_is_on = True
+while game_is_on:
+    screen.update()
+    ball.move()
 
-# Detect when paddle misses
+    # Detect collision with wall and bounce
+    if ball.ycor() > 280 or ball.ycor() < -280:
+        ball.bounce_y()
 
-# Keep score
- # On left and right hand of screen
+    # Detect collision with a paddle
+    if ball.distance(user_paddle.paddle2) < 50 and ball.xcor() > 320 or ball.distance(user_paddle.paddle) < 50 and ball.xcor() < -320:
+        ball.bounce_x()
+    # Detect when paddle misses (ball goes out of bounds)
+    if ball.xcor() > 380:
+        ball.reset_position()
+        scoreboard.left_point()
+    if ball.xcor() < -380:
+        ball.reset_position()
+        scoreboard.right_point()
+    # Keep score on left and right hand of screen
 
 screen.exitonclick()
