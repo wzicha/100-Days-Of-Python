@@ -1,3 +1,3 @@
 Intermediate list and dictionary comprehension project. Creation of a NATO alphabet project
 
-Squaring numbers and filtering even numbers challenge included
+Squaring numbers and filtering even numbers as well as data overlap challenges included
