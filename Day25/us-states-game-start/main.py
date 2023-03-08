@@ -18,6 +18,8 @@ while score < 50:
     List = pandas.read_csv("50_states.csv")
     # Check if the guess is among the 50 states
     row = List.loc[List['state'] == answer_state]
+    if answer_state == "Exit":
+        break
     if answer_state not in guess_list:
         # Write correct guesses onto the map
         marker = turtle.Turtle()
@@ -25,14 +27,21 @@ while score < 50:
         marker.penup()
         if not row.empty:
             marker.goto(row.at[row.index[0], 'x'], row.at[row.index[0], 'y'])
-            marker.write(f"{answer_state}", move=False, align='center', font=('Arial', 7, 'normal'))
+            marker.write(f"{answer_state}", move=False, align='left', font=('Arial', 5, 'normal'))
             # Record the correct guesses in a list
             guess_list.append(answer_state)
             score += 1
         else:
             print("Try again!")
 
-print(f"Your guesses were {guess_list}")
-turtle.mainloop()
-
-screen.exitonclick()
+# Generate CSV file containing missing states from guesses
+if score < 50:
+    print(f"Your guesses were {guess_list}. Check missing_states.csv to see the states that you missed out on")
+    missing_states = []
+    for state in List['state']:
+        if state not in guess_list:
+            missing_states.append(state)
+    new_data = pandas.DataFrame(missing_states)
+    new_data.to_csv('missing_states.csv', index=False, sep=',', mode='w')
+else:
+    print("Congratulations! You correctly guessed all 50 states!")
