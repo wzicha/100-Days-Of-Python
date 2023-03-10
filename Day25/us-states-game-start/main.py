@@ -37,10 +37,7 @@ while score < 50:
 # Generate CSV file containing missing states from guesses
 if score < 50:
     print(f"Your guesses were {guess_list}. Check missing_states.csv to see the states that you missed out on")
-    missing_states = []
-    for state in List['state']:
-        if state not in guess_list:
-            missing_states.append(state)
+    missing_states = [state for state in List['state'] if state not in guess_list]
     new_data = pandas.DataFrame(missing_states)
     new_data.to_csv('missing_states.csv', index=False, sep=',', mode='w')
 else:
