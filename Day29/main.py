@@ -1,7 +1,39 @@
 from tkinter import *
+from tkinter import messagebox
+import random
+import pyperclip
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+# Password Generator Project from Day 5. Add list comprehension to improve password generation.
+def generate_password():
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v',
+               'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+               'R',
+               'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+
+    password_letters = [random.choice(letters) for _ in range(nr_letters)]
+    password_symbols = [random.choice(symbols) for _ in range(nr_symbols)]
+    password_numbers = [random.choice(numbers) for _ in range(nr_numbers)]
+
+    password_list = password_letters + password_symbols + password_numbers
+    random.shuffle(password_list)
+
+    password = "".join(password_list)
+
+    # Clear previous password
+    Password_Entry.delete(0, END)
+    Password_Entry.insert(0, password)
+    # Add password to clipboard
+    pyperclip.copy(password)
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
@@ -11,14 +43,25 @@ def save():
     user_email = Email_User_Entry.get()
     # Get Password
     user_password = Password_Entry.get()
-    # Merge user data into string, then save to a local file (same level as main.py)
-    user_info = f"{web_name} | {user_email} : {user_password}"
-    print(user_info)
-    # Create file if it does not exist
-    f = open("data.txt", "x")
-    f = open("data.txt", "a")
-    f.write(user_info)
-    f.close()
+
+    # Check to ensure that all fields are populated
+    if len(web_name) > 0 and len(user_email) > 0 and len(user_password) > 0:
+        is_acceptable = messagebox.askokcancel(title=f"{web_name}",
+                                               message=f"These are the details entered: \nEmail: {user_email} "
+                                                       f"\nPassword: {user_password} \nIs it okay to save?")
+
+        if is_acceptable:
+            # Merge user data into string, then save to a local file (same level as main.py)
+            user_info = f"{web_name} | {user_email} | {user_password} \n"
+            print(user_info)
+            f = open("data.txt", "a")
+            f.write(user_info)
+            f.close()
+            Website_Entry.delete(0, END)
+            Password_Entry.delete(0, END)
+    else:
+        messagebox.showinfo(title="Oops", message="Please don't leave any fields empty!")
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -52,7 +95,7 @@ Password_Entry = Entry(width=21)
 Password_Entry.grid(column=1, row=3, sticky="EW")
 
 # Buttons
-Generate_Password = Button(text="Generate Password")
+Generate_Password = Button(text="Generate Password", command=generate_password)
 Generate_Password.grid(column=2, row=3, sticky="EW")
 Add_Button = Button(text="Add", width=35, command=save)
 Add_Button.grid(column=1, row=4, columnspan=2, sticky="EW")
