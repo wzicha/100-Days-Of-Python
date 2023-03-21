@@ -34,8 +34,17 @@ def generate_password():
     Password_Entry.insert(0, password)
     # Add password to clipboard
     pyperclip.copy(password)
+# ---------------------------- FIND PASSWORD ------------------------------- #
+def find_password():
+  # Triggered when search button is pressed
 
+  # Check if user's text entry matches an item in data.json
 
+  # If yes, show a messagebox with website's name and password
+
+  # Catch an exception that might occur trying to access the data.json
+
+  # If the user's website does not exist inside data.json show message
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
     # Get Website
@@ -72,8 +81,8 @@ def save():
                 with open("data.json", "w") as data_file:
                     json.dump(data, data_file, indent=4)
             finally:
-                    Website_Entry.delete(0, END)
-                    Password_Entry.delete(0, END)
+                Website_Entry.delete(0, END)
+                Password_Entry.delete(0, END)
     else:
         messagebox.showinfo(title="Oops", message="Please don't leave any fields empty!")
 
@@ -92,8 +101,8 @@ canvas.grid(column=1, row=0)
 
 Website = Label(text="Website:", font=("Times New Roman", 12))
 Website.grid(column=0, row=1)
-Website_Entry = Entry(width=35)
-Website_Entry.grid(column=1, row=1, columnspan=2, sticky="EW")
+Website_Entry = Entry(width=21)
+Website_Entry.grid(column=1, row=1, sticky="EW")
 # Set cursor in website entry by default
 Website_Entry.focus()
 
@@ -114,5 +123,7 @@ Generate_Password = Button(text="Generate Password", command=generate_password)
 Generate_Password.grid(column=2, row=3, sticky="EW")
 Add_Button = Button(text="Add", width=35, command=save)
 Add_Button.grid(column=1, row=4, columnspan=2, sticky="EW")
+Search_Button = Button(text="Search", command=find_password)
+Search_Button.grid(column=2, row=1, sticky="EW")
 
 window.mainloop()
