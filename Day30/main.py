@@ -34,17 +34,37 @@ def generate_password():
     Password_Entry.insert(0, password)
     # Add password to clipboard
     pyperclip.copy(password)
+
+
 # ---------------------------- FIND PASSWORD ------------------------------- #
 def find_password():
-  # Triggered when search button is pressed
+    # Triggered when search button is pressed
+    web_name = Website_Entry.get()
+    user_email = Email_User_Entry.get()
+    user_password = Password_Entry.get()
+    # Check if user's text entry matches an item in data.json
+    try:
+        with open("data.json", "r") as data_file:
+            # Read data
+            data = json.load(data_file)
+            # If yes, show a messagebox with website's name and password
+            if web_name in data:
+                contains_password = messagebox.askokcancel(title=f"{web_name}",
+                                                    message=f"These are the details: \nEmail: {data[web_name]['email']}"
+                                                    f"\nPassword: {data[web_name]['password']}")
 
-  # Check if user's text entry matches an item in data.json
+    # Catch an exception that might occur trying to access the data.json
+    except FileNotFoundError:
+        print("File not found")
+        no_file = messagebox.showwarning(title="Warning!", message="No Data File Found")
 
-  # If yes, show a messagebox with website's name and password
+    # If the user's website does not exist inside data.json show message
+    with open("data.json", "r") as data_file:
+        # Read data
+        data = json.load(data_file)
+        if web_name not in data:
+            no_details = messagebox.showwarning(title="Warning!", message="No details for the website exists.")
 
-  # Catch an exception that might occur trying to access the data.json
-
-  # If the user's website does not exist inside data.json show message
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
     # Get Website
