@@ -9,30 +9,50 @@ random_value = random.randint(1, 102)
 french_word_test = french_words.loc[random_value, 'French']
 english_word_test = french_words.loc[random_value, 'English']
 
+cards_to_learn = french_words.to_dict(orient="records")
+current_card = {}
+flip_card_timer = None
+
+# Try to open words_to_learn
+try:
+    file = open("data/words_to_learn.csv", "r")
+    file.close()
+except FileNotFoundError:
+    # If words_to_learn does not exist, create it
+    file = open("data/words_to_learn.csv", "x")
+    file.close()
+
 
 def generate_word():
     global french_word_test
     global english_word_test
     global back_label
+    global flip_card_timer
     back_label.grid_forget()
-    # front_label = Label(image=card_front, borderwidth=0, highlightthickness=0, background=BACKGROUND_COLOR)
-    # front_label.grid(column=0, row=0, columnspan=2, rowspan=1)
+    front_label = Label(image=card_front, borderwidth=0, highlightthickness=0, background=BACKGROUND_COLOR)
+    front_label.grid(column=0, row=0, columnspan=2, rowspan=1)
     # front_label.lift()
-    language.config(text="French")
+    language.config(text="French", bg="#FFFFFF")
     french_words_file = pandas.read_csv('data/french_words.csv')
     french_words = pandas.DataFrame(french_words_file)
     random_value = random.randint(1, 102)
     new_word = french_words.loc[random_value, 'French']
     english_word_test = french_words.loc[random_value, 'English']
     french_word_test = new_word
-    word_presented.config(text=f"{french_word_test}")
+    word_presented.config(text=f"{french_word_test}", bg="#FFFFFF")
+    word_presented.lift()
+    language.lift()
     window.update()
-    window.after(3000, flip_card)
+    # Cancel previous timer
+    if flip_card_timer:
+        window.after_cancel(flip_card_timer)
+    flip_card_timer = window.after(3000, flip_card)
     window.update()
+
 
 def flip_card():
     global back_label
-    # front_label.grid_forget()
+    front_label.grid_forget()
     back_label = Label(image=card_back, borderwidth=0, highlightthickness=0, background='GREY')
     back_label.grid(column=0, row=0, columnspan=2, rowspan=1)
     language.config(text="English", bg="#B1DDC6", highlightthickness=0)
@@ -40,6 +60,20 @@ def flip_card():
     language.lift()
     word_presented.lift()
     window.update()
+
+
+def known_card():
+    global current_card, cards_to_learn
+
+    if current_card in cards_to_learn:
+        cards_to_learn.remove(current_card)
+
+    if cards_to_learn:
+        generate_word()
+    else:
+        word_presented.config(text="Congratulations! You have completed all flashcards.", bg="#FFFFFF")
+        language.config(text="", bg="#FFFFFF")
+
 
 BACKGROUND_COLOR = "#B1DDC6"
 
@@ -73,7 +107,7 @@ wrong_button = Button(image=wrong_img, highlightthickness=0, command=generate_wo
 wrong_button.grid(column=0, row=1)
 
 right_img = PhotoImage(file='images/right.png')
-right_button = Button(image=right_img, highlightthickness=0, command=generate_word)
+right_button = Button(image=right_img, highlightthickness=0, command=known_card)
 right_button.grid(column=1, row=1)
 
 window.mainloop()
