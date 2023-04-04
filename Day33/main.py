@@ -6,7 +6,9 @@ import time
 MY_LAT = 45.500940  # Your latitude
 MY_LONG = -73.572700  # Your longitude
 
-# email / password
+# Your email and password
+#email
+#password
 
 def is_iss_close():
     response = requests.get(url="http://api.open-notify.org/iss-now.json")
@@ -30,22 +32,14 @@ def is_night():
     response = requests.get("https://api.sunrise-sunset.org/json", params=parameters)
     response.raise_for_status()
     data = response.json()
+    sunrise = int(data["results"]["sunrise"].split("T")[1].split(":")[0])
+    sunset = int(data["results"]["sunset"].split("T")[1].split(":")[0])
 
-    # Convert UTC time to local time
-    sunrise_utc = datetime.fromisoformat(data["results"]["sunrise"]).replace(tzinfo=timezone.utc)
-    sunset_utc = datetime.fromisoformat(data["results"]["sunset"]).replace(tzinfo=timezone.utc)
-    sunrise_local = sunrise_utc.astimezone()
-    sunset_local = sunset_utc.astimezone()
-
-    # Format time in PM format
-    sunrise_pm = sunrise_local.strftime('%I:%M:%S %p')
-    sunset_pm = sunset_local.strftime('%I:%M:%S %p')
-
-    print(data)
-
-    # Check if it is currently night time
     time_now = datetime.now().hour
-    return time_now >= sunset_local.hour or time_now <= sunrise_local.hour
+
+    if time_now >= sunset or time_now <= sunrise:
+        return True
+
 
 
 def send_email():
