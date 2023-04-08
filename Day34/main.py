@@ -11,7 +11,7 @@ for question in question_data:
     question_bank.append(new_question)
 
 
-quiz = QuizBrain(question_bank)
+quiz_ui = QuizInterface(question_text, question)
 quiz_ui = QuizInterface()
 
 while quiz.still_has_questions():
