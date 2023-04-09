@@ -14,8 +14,8 @@ for question in question_data:
 quiz_ui = QuizInterface(question_text, question)
 quiz_ui = QuizInterface()
 
-while quiz.still_has_questions():
-    quiz.next_question()
+while quiz_ui.still_has_questions():
+    quiz_ui.next_question()
 
 print("You've completed the quiz")
-print(f"Your final score was: {quiz.score}/{quiz.question_number}")
+print(f"Your final score was: {quiz_ui.score}/{quiz_ui.question_number}")
