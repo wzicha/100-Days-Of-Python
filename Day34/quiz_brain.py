@@ -3,10 +3,10 @@ import html
 class QuizBrain:
 
     def __init__(self, q_list):
-        self.question_number = 0
         self.score = 0
+        self.question_number = 0
         self.question_list = q_list
-        self.current_question = None
+        self.current_question = q_list[0] if q_list else None
 
     def still_has_questions(self):
         return self.question_number < len(self.question_list)
