@@ -42,11 +42,11 @@ class QuizInterface:
         self.window.grid_columnconfigure(1, weight=1)
         self.window.grid_rowconfigure(1, weight=1)
 
-        # self.get_next_question()
+        self.get_next_question()
 
         self.window.mainloop()
 
     def get_next_question(self):
         q_text = self.quiz.next_question()
-        self.question_text_label.config(self.question_text, text=q_text)
+        self.question_text_label.config(text=q_text)
 
