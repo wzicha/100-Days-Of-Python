@@ -3,13 +3,19 @@ import datetime
 
 lat = 45.500940  # Your latitude
 lon = -73.572700  # Your longitude
-# API_KEY
-time = datetime.datetime.now()
+#api key
+weather_params = {
+    "lat": lat,
+    "lon": lon,
+    "appid": API_key,
+}
+OWM_Endpoint = "https://api.openweathermap.org/data/2.8/onecall"
 
-response = requests.get(f"https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={lat}&lon={lon}&dt={time}&appid={API_key}")
+response = requests.get(OWM_Endpoint, params=weather_params)
 # response.raise_for_status()
 data = response.json()
 
 print(response.status_code)
+print(data)
 
 
